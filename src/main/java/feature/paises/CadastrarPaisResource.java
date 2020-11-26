@@ -1,5 +1,6 @@
 package feature.paises;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -14,12 +15,13 @@ import javax.ws.rs.core.Response;
 public class CadastrarPaisResource {
 
     @POST
-    public Response cadastrar(@Valid
-                                          CadastrarPaisFormObject form) {
+    @Transactional
+    public Response cadastrar(@Valid CadastrarPaisFormObject form) {
 
-        form.toEntity();
+        Pais pais = form.toEntity();
+        pais.persist();
 
-        return Response.ok().build();
+        return Response.ok(pais).status(Response.Status.CREATED).build();
     }
 
 }
